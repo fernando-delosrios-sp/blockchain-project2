@@ -1,5 +1,6 @@
-let starNotary = artifacts.require('StarNotary')
+const name = "StarNotary"
+let contract = artifacts.require(name)
 
 module.exports = async (deployer) => {
-  let deployStarNotary = await deployer.deploy(starNotary)
+  await deployer.deploy(contract)
 }

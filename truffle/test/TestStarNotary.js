@@ -7,8 +7,9 @@ const BN = require('bn.js')
 // Enable and inject BN dependency
 chai.use(require('chai-bn')(BN));
 
+// Use your current contract address if needed
+let currentAddress
 const StarNotary = artifacts.require("StarNotary")
-const Star = artifacts.require("Star")
 
 contract('StarNotary', (accounts) => {
     const starsByOwner = {}
@@ -26,7 +27,7 @@ contract('StarNotary', (accounts) => {
     }
 
     before(async () => {
-        notary = await StarNotary.deployed()
+        notary = await (currentAddress ? StarNotary.at(currentAddress) : StarNotary.deployed())
     })
 
     it('Pinata is authenticated', async () => {
@@ -43,6 +44,7 @@ contract('StarNotary', (accounts) => {
     it('User can mint a new star', async () => {
         const balance = web3.utils.toBN('1')
         const tokenURI = await generateTokenURI('My awesome star!')
+        // console.log(tokenURI)
 
         const tx = await notary.createStar(tokenURI, { from: starGazer })
         //Check dynamic tokenId
@@ -91,15 +93,10 @@ contract('StarNotary', (accounts) => {
 
         const starBuyer1FinalETH = await web3.eth.getBalance(starBuyer1)
         const gasUsed = tx.receipt.gasUsed
-        // console.log(tx)
-        // console.log(Number(starBuyer1InitialETH))
-        // console.log(Number(starBuyer1FinalETH))
-        // console.log(Number(price))
-        // console.log(Number(gasUsed))
-        // console.log(Number(starBuyer1InitialETH - (starBuyer1FinalETH)))
+        const gasPrice = await web3.eth.getGasPrice()
 
         //Check balances are correct
-        expect(Number(starBuyer1FinalETH) + Number(price)).to.lt(Number(starBuyer1InitialETH), "Initial and final balances don't match")
+        expect(Number(starBuyer1FinalETH) + Number(price) + Number(gasUsed) * Number(gasPrice)).to.equal(Number(starBuyer1InitialETH), "Initial and final balances don't match")
         starsByOwner[starBuyer1] = tokenId
     })
 

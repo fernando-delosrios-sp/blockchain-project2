@@ -18,11 +18,10 @@
  *
  */
 
-// require('dotenv').config();
-// const mnemonic = process.env["MNEMONIC"];
-// const infuraProjectId = process.env["INFURA_PROJECT_ID"];
+require('dotenv').config();
+const { ALCHEMY_POLYGON_ID, ALCHEMY_GOERLI_ID, INFURA_ID, MNEMONIC } = process.env;
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
+const HDWalletProvider = require('@truffle/hdwallet-provider');
 
 module.exports = {
   /**
@@ -35,7 +34,7 @@ module.exports = {
    * $ truffle test --network <network-name>
    */
 
-  contracts_build_directory: "contracts/artifacts",
+  // contracts_build_directory: "contracts/artifacts", //Provide from command line
   networks: {
     // Useful for testing. The `development` name is special - truffle uses it by default
     // if it's defined here and no other network is specified at the command line.
@@ -49,6 +48,21 @@ module.exports = {
       network_id: "*",       // Any network (default: none)
       websocket: true
     },
+    "alchemy-polygon": {
+      provider: () => new HDWalletProvider(MNEMONIC, `https://polygon-mainnet.g.alchemy.com/v2/${ALCHEMY_POLYGON_ID}`),
+      network_id: 137,   // This network is yours, in the cloud.
+      production: false    // Treats this network as if it was a public net. (default: false)
+    },
+    "alchemy-goerli": {
+      provider: () => new HDWalletProvider(MNEMONIC, `https://eth-goerli.g.alchemy.com/v2/${ALCHEMY_GOERLI_ID}`),
+      network_id: 5,   // This network is yours, in the cloud.
+      production: false,    // Treats this network as if it was a public net. (default: false)
+    },
+    "infura-goerli": {
+      provider: () => new HDWalletProvider(MNEMONIC, `https://goerli.infura.io/v3/${INFURA_ID}`),
+      network_id: 5,   // This network is yours, in the cloud.
+      production: false,    // Treats this network as if it was a public net. (default: false)
+    }
     //
     // An additional network, but with some advanced options…
     // advanced: {

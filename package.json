@@ -1,0 +1,14 @@
+{
+	"name": "blockchain-project2",
+	"version": "1.0.0",
+	"description": "Decentralized Star Notary",
+	"scripts": {
+		"migrate": "npm --prefix truffle/ run migrate",
+		"compile": "npm --prefix truffle/ run compile",
+		"compile-for-ui": "npm --prefix truffle/ run comp -- --contracts_build_directory=../client/src/contracts",
+		"start": "npm --prefix client/ run start",
+		"build": "npm --prefix client/ run build"
+	},
+	"author": "",
+	"license": "ISC"
+}

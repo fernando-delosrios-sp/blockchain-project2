@@ -11,9 +11,9 @@
 	},
 	"scripts": {
 		"test": "truffle test",
-		"migrate": "truffle migrate --reset",
-		"compile": "truffle compile",
-		"pin_star": "node scripts/pinata.js"
+		"migrate": "truffle migrate --contracts_build_directory=contracts/artifacts --reset",
+		"compile": "truffle compile --contracts_build_directory=contracts/artifacts",
+		"comp": "truffle compile"
 	},
 	"author": "",
 	"license": "MIT",
